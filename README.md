@@ -25,7 +25,7 @@ This repository showcases selected projects that demonstrate my ability to build
 
 A front-end project focused on presenting a clean, user-friendly dining experience for a hospitality brand. Emphasis was placed on layout structure, responsiveness, and clear content presentation for customers.
 
-🔗 Live Demo: https://twin-villa-dine.vercel.app 
+🔗 Live Demo: https://twin-villa-dine.vercel.app/
 📁 Repository: https://github.com/NwankwoDave01/twin-villa-dine
 
 **Highlights**
