@@ -25,8 +25,8 @@ This repository showcases selected projects that demonstrate my ability to build
 
 A front-end project focused on presenting a clean, user-friendly dining experience for a hospitality brand. Emphasis was placed on layout structure, responsiveness, and clear content presentation for customers.
 
-🔗 Live Demo: *(add link if available)*  
-📁 Repository: *(add repo link if separate)*
+🔗 Live Demo: https://twin-villa-dine.vercel.app 
+📁 Repository: https://github.com/NwankwoDave01/twin-villa-dine
 
 **Highlights**
 - Business-focused UI design
@@ -70,8 +70,8 @@ A lightweight, responsive FAQ accordion built using HTML, CSS, and JavaScript. T
 
 A real-world WordPress project delivered for a hospitality business. The work involved theme customization, responsive layout adjustments, and implementing client requirements using modern WordPress tools.
 
-🔗 Live Website: *(add link if live)*  
-📁 Case Study Repository: *(add repo link)*
+🔗 Live Website: https://kingfisherinn.co.za/
+📁 Case Study Repository: https://github.com/NwankwoDave01/wordpress-case-studies
 
 **Highlights**
 - Real client-facing production work
