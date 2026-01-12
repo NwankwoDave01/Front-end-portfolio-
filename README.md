@@ -84,7 +84,7 @@ A real-world WordPress project delivered for a hospitality business. The work in
 ## 📫 Contact
 - **Email:** ebukadave2009@gmail.com  
 - **GitHub:** https://github.com/NwankwoDave01  
-- **LinkedIn:** www.linkedin.com/in/nwankwo-dave
+- **LinkedIn:** www.linkedin.com/in/nwankwo-dave-7126bb397
 
 ---
 
