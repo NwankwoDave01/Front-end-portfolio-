@@ -1,0 +1,316 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "9fed7f75-4e38-45b6-a40f-7a55ac4b551b",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        0
+      ],
+      "id": "e97d4668-e286-460b-9741-e4bb0c933dbd",
+      "name": "Webhook",
+      "webhookId": "9fed7f75-4e38-45b6-a40f-7a55ac4b551b"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b153fb1c-6cd2-4dcc-9b6e-3ef9a59866d3",
+              "name": "monthly_revenue",
+              "value": "= {{ Number(($json.body?.monthly_revenue || \"\").replace(/[$,]/g, \"\")) }}",
+              "type": "number"
+            },
+            {
+              "id": "6ad4eb1b-c4d6-4b20-984f-cc817c0432b9",
+              "name": "chellenge_length",
+              "value": "={{ ($json.body?.biggest_challenge || \"\").length }}\n\n",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -112,
+        0
+      ],
+      "id": "57246c2d-bab2-4b6c-95e2-7cc8548f5039",
+      "name": "Parse Lead Data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Act as Sarah Chen, a warm and professional business coach. Talk with empathy and Authority",
+              "role": "model"
+            },
+            {
+              "content": "=Write a friendly email to  {{ $('Webhook').item.json.body.name }} who has a {{ $('Webhook').item.json.body.business_type }} and makes {{ $('Webhook').item.json.body.monthly_revenue }} per month. They said their biggest challaenge is : {{ $('Webhook').item.json.body.biggest_challenge }}. sympathize with them and explain sarah helps clients using systems and logic. include CTAs(softly tell them to book a call in aprofessional manner)"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        -96
+      ],
+      "id": "dc2eda20-fcf0-4c01-b881-8726d3f55297",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YcQ7CvZGBF2UeZeD",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "248b67f9-c31a-4232-b8ec-76b70485832a",
+              "leftValue": "={{ $json.monthly_revenue }}",
+              "rightValue": 10000,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "7a58a2c7-6457-47b7-a2ed-347772e59af2",
+              "leftValue": "={{ $json.chellenge_length }}",
+              "rightValue": 50,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        80,
+        0
+      ],
+      "id": "36b3d2e2-f98a-4987-a4d8-a221b5ecd302",
+      "name": "check qualification lead"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "938736f9-f88b-48d9-930c-1cbe74bc21d4",
+              "name": "unqualified_lead",
+              "value": "=Hi {{ $('Webhook').item.json.body.name }}, you are unqualified. Try again Later",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        288,
+        96
+      ],
+      "id": "035242a6-fb43-4f96-b14b-6cf4d2fbb4ae",
+      "name": "unqualified lead"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "33d3e89b-2b19-43dd-9651-0d073a00d82b",
+              "leftValue": "={{ $json.content.parts[0].text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        560,
+        -96
+      ],
+      "id": "66c0ebf2-fa8e-44f1-9e29-3536270ae314",
+      "name": "check for fallback"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b3e823e-7223-45ce-ad17-56498281aa9b",
+              "name": "qualified_lead",
+              "value": "Hi, the AI model is not responding now, however you qualified and we will get in touch with you soonest",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        768,
+        -176
+      ],
+      "id": "fbd544a8-7b86-486f-ab19-cc538fe3d22b",
+      "name": "fallback message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "229852dc-f84d-463a-a927-afaf8be7321b",
+              "name": "qualified_lead_after fallback",
+              "value": "={{ $('Message a model').item.json.content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        768,
+        0
+      ],
+      "id": "1b749321-d223-43e1-8516-f3c4e8c17e67",
+      "name": "qualified leads"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parse Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Lead Data": {
+      "main": [
+        [
+          {
+            "node": "check qualification lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "check for fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check qualification lead": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "unqualified lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check for fallback": {
+      "main": [
+        [
+          {
+            "node": "fallback message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "qualified leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "37aa2438-9d5a-46fd-b262-68a3a4338b4c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "afa1b3bf1dc2b7fdb2e6c880e4fdfbccf58ea4d9edf86d9f1a2490466e922200"
+  },
+  "id": "GTsS1LqqdvQr4V8z",
+  "tags": []
+}
